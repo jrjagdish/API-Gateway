@@ -1,14 +1,24 @@
-from pydantic import BaseModel,EmailStr
+# app/schemas/auth.py
+from pydantic import BaseModel, EmailStr
 
-class UserCreate(BaseModel):
-    email:EmailStr
-    password : str
-    name: str|None = None
+class RegisterPayload(BaseModel):
+    email: EmailStr
+    password: str
+    name: str | None = None
+
+class LoginPayload(BaseModel):
+    email: EmailStr
+    password: str
+
+class TokenResponse(BaseModel):
+    access_token: str
+    token_type: str = "bearer"
+    refresh_token: str | None = None  # you may return raw refresh token once
 
 class UserResponse(BaseModel):
-    id:int 
-    email:EmailStr
-    name:str | None
+    id: int
+    email: EmailStr
+    name: str | None
 
-    class config:
-        from_attributes = True   
+    class Config:
+        from_attributes = True
