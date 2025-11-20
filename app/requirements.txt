@@ -8,3 +8,5 @@ pydantic
 alembic
 httpx
 python-jose[cryptography]
+redis
+
