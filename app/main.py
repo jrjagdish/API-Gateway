@@ -69,3 +69,4 @@ def root():
 app.include_router(auth.router) 
 app.include_router(projects.router)
 app.include_router(api_keys.router)
+app.include_router(auth.router) 

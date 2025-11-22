@@ -1,17 +1,14 @@
 from pydantic import BaseModel
-from typing import Optional
-from datetime import datetime
 
-class ProjectCreateSchema(BaseModel):
+
+class ProjectCreate(BaseModel):
     name: str
-    description: Optional[str] = None
+    description: str | None = None
 
-class ProjectOutSchema(BaseModel):
+class ProjectResponse(BaseModel):
     id: int
     name: str
-    description: Optional[str] = None
-    owner_user_id: int
-    created_at: datetime
+    description: str | None
 
     class Config:
         from_attributes = True

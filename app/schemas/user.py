@@ -13,7 +13,7 @@ class LoginPayload(BaseModel):
 class TokenResponse(BaseModel):
     access_token: str
     token_type: str = "bearer"
-    refresh_token: str | None = None  
+    refresh_token: str | None = None  # you may return raw refresh token once
 
 class UserResponse(BaseModel):
     id: int
