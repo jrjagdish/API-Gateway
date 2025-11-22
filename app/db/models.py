@@ -29,6 +29,33 @@ class Role(Base):
     id =Column( Integer,primary_key=True,index=True)
     name = Column(String,unique=True,nullable=False)
 
+class ProjectProviderKey(Base):
+    __tablename__ = "project_provider_keys"
+
+    id = Column(Integer, primary_key=True, index=True)
+    project_id = Column(Integer, ForeignKey("projects.id", ondelete="CASCADE"), nullable=False)
+    provider_id = Column(Integer, ForeignKey("providers.id", ondelete="CASCADE"), nullable=False)
+
+    encrypted_api_key = Column(String, nullable=False)
+    meta_data = Column(String, nullable=True)    
+
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+    updated_at = Column(DateTime(timezone=True), onupdate=func.now())
+
+    project = relationship("Project", backref="provider_keys")
+    provider = relationship("Provider", backref="project_connections")
+
+class Provider(Base):
+    __tablename__ = "providers"
+
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String, unique=True, nullable=False)         
+    category = Column(String, nullable=False)                  
+    base_url = Column(String, nullable=True)                   
+    logo_url = Column(String, nullable=True)
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+
+
 class User_Roles(Base):
     __tablename__ = 'user_roles'
 
