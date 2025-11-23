@@ -3,6 +3,7 @@ import hashlib
 from datetime import datetime,timedelta, timezone
 import os
 from typing import Optional
+import bcrypt
 from passlib.context import CryptContext
 from jose import JWTError,jwt
 from app.core.config import settings
@@ -66,7 +67,7 @@ def generate_api_key():
     return raw,hased
 
 def hash_api_key(raw_key:str):
-    return hashlib.sha256(raw_key.encode('utf-8')).hexdigest()
+    return bcrypt.hashpw(raw_key.encode(), bcrypt.gensalt()).decode()
 
-def verify_api_key(raw_key:str,stored_hash:str):
-    return hash_api_key(raw_key) == stored_hash
+def verify_api_key(raw_key: str, stored_hash: str):
+    return bcrypt.checkpw(raw_key.encode(), stored_hash.encode())

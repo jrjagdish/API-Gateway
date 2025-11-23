@@ -5,7 +5,7 @@ from sqlalchemy import text
 from app.db.init_db import init_db
 from app.db.models import RequestLog
 from app.db.session import SessionLocal
-from app.router import auth,projects,api_keys
+from app.router import auth,projects,api_keys,providers
 from app.services.provider_service import rate_limit_middleware
 
 
@@ -70,3 +70,4 @@ app.include_router(auth.router)
 app.include_router(projects.router)
 app.include_router(api_keys.router)
 app.include_router(auth.router) 
+app.include_router(providers.router)

@@ -78,7 +78,7 @@ class Api_Keys(Base):
     is_active = Column(Boolean, default=True) 
     created_at = Column(DateTime(timezone=True),server_default=func.now())
     expires_at = Column(DateTime(timezone=True),nullable=False)   
-    last_used_at = Column(DateTime(timezone=True),nullable=False)
+    last_used_at = Column(DateTime(timezone=True),nullable=True)
 
 class RequestLog(Base):
     __tablename__ = "request_logs"
