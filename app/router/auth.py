@@ -101,9 +101,12 @@ def get_current_user(
 ):
     try:
         raw_token = token.credentials  
-
         payload = security.decode_access_token(raw_token)
-
+        
+        # Check if payload contains an error (from Option 1)
+        if isinstance(payload, dict) and "error" in payload:
+            raise HTTPException(status_code=401, detail=payload["detail"])
+            
         if payload.get("type") != "access":
             raise HTTPException(status_code=401, detail="Invalid token type")
 
@@ -111,12 +114,13 @@ def get_current_user(
         if not user_id:
             raise HTTPException(status_code=401, detail="Invalid token payload")
 
-    except Exception:
+        user = db.query(User).filter(User.id == int(user_id)).first()
+        if not user:
+            raise HTTPException(status_code=401, detail="User not found")
+
+        return user
+        
+    except JWTError as e:  # ✅ Specifically catch JWT errors
+        raise HTTPException(status_code=401, detail=f"Token error: {str(e)}")
+    except Exception as e:
         raise HTTPException(status_code=401, detail="Could not validate credentials")
-
-    user = db.query(User).filter(User.id == int(user_id)).first()
-
-    if not user:
-        raise HTTPException(status_code=401, detail="User not found")
-
-    return user
