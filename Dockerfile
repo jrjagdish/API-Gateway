@@ -1,29 +1,43 @@
-# Use a lightweight Python image
+# -------------------------------
+# 1. Base Image
+# -------------------------------
 FROM python:3.11-slim
 
-# Set environment variables
+# Prevent Python from writing .pyc files and buffering stdout
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 
-# Set working directory
+# Working directory inside container
 WORKDIR /app
 
-# Install system dependencies
+# -------------------------------
+# 2. Install system dependencies
+# -------------------------------
 RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
+    libpq-dev \
     && rm -rf /var/lib/apt/lists/*
 
-# Copy only requirements first (for caching)
+# -------------------------------
+# 3. Install Python packages
+# -------------------------------
 COPY requirements.txt .
 
-# Install dependencies
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir --upgrade pip \
+    && pip install --no-cache-dir -r requirements.txt
 
-# Copy the entire project
+# -------------------------------
+# 4. Copy project files
+# -------------------------------
 COPY . .
 
-# Expose port (Render uses PORT env, but exposing 8000 is okay)
+# -------------------------------
+# 5. Expose API port
+# (Render uses PORT variable automatically)
+# -------------------------------
 EXPOSE 8000
 
-# Start the app using Gunicorn with Uvicorn workers
+# -------------------------------
+# 6. Run FastAPI with Gunicorn + Uvicorn worker
+# -------------------------------
 CMD ["gunicorn", "app.main:app", "-k", "uvicorn.workers.UvicornWorker", "--bind", "0.0.0.0:8000"]
