@@ -1,11 +1,10 @@
 fastapi
-uvicorn
+uvicorn[standard]
 python-dotenv
 sqlalchemy
+alembic
 psycopg2-binary
 passlib[bcrypt]
-pydantic
-alembic
-httpx
 python-jose[cryptography]
+httpx
 redis
