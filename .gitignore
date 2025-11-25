@@ -1,6 +1,11 @@
-# Created by venv; see https://docs.python.org/3/library/venv.html
-
-# Environment files
+# Python venv
+venv/
 .env
-.env.*
+__pycache__/
+*.pyc
 
+# OS
+.DS_Store
+
+# Environment
+.env
