@@ -7,6 +7,7 @@ from app.db.models import User,Refresh_token
 from app.db.session import SessionLocal
 from app.schemas.user import RegisterPayload,LoginPayload,TokenResponse,UserResponse
 from app.core import security
+from jose import JWTError, jwt
 
 outh2_scheme = HTTPBearer()
 router = APIRouter(prefix='/auth',tags=['auth'])
