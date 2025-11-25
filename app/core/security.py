@@ -33,12 +33,29 @@ def create_access_token(subject:str,expires_delta: Optional[timedelta] = None):
     token = jwt.encode(payload,JWT_SECRET,algorithm=JWT_ALGORITHM)
     return token
 
-def decode_access_token(token:str):
+def decode_access_token(token: str):
     try:
-        payload = jwt.decode(token,JWT_SECRET,algorithms=JWT_ALGORITHM)
+        payload = jwt.decode(
+            token, 
+            JWT_SECRET, 
+            algorithms=[JWT_ALGORITHM]
+        )
         return payload
-    except JWTError as e:
-        raise
+    except jwt.ExpiredSignatureError:
+        raise HTTPException(
+            status_code=401,
+            detail="Token has expired"
+        )
+    except jwt.JWTClaimsError as e:
+        raise HTTPException(
+            status_code=401,
+            detail=f"Invalid token claims: {str(e)}"
+        )
+    except jwt.JWTError as e:
+        raise HTTPException(
+            status_code=401,
+            detail=f"Invalid token: {str(e)}"
+        )
 
 #refresh token helper 
 def generate_raw_refresh_token():
