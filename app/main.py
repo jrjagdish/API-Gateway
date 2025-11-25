@@ -7,6 +7,7 @@ from app.db.models import RequestLog
 from app.db.session import SessionLocal
 from app.router import auth,projects,api_keys,currency_provider,news_provider, weather_provider
 from app.services.provider_service import rate_limit_middleware
+from fastapi.middleware.cors import CORSMiddleware
 
 
 
@@ -61,6 +62,14 @@ async def log_requests(request: Request, call_next):
     )
 
     return response
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],          
+    allow_credentials=True,
+    allow_methods=["*"],           
+    allow_headers=["*"],           
+)
 
 @app.get('/')
 def root():
