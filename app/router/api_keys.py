@@ -16,7 +16,7 @@ def create_api_key(project_id: int, db: Session = Depends(get_db), current_user 
         raise HTTPException(status_code=404, detail="Project not found")
 
     result = create_key(db=db, project_id=project.id)
-    base_url = "https://api-gateway-dxr3.onrender.com/"  # In production, use your domain
+    base_url = "https://api-gateway-dxr3.onrender.com"  # In production, use your domain
     
     # Usage examples with the new API key
     usage_examples = {
